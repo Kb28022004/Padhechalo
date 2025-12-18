@@ -38,7 +38,7 @@ jobs:
       # Frontend
       - name: Install frontend deps
         working-directory: client
-        run: npm install
+        run: npm install -f
 
       - name: Frontend env
         working-directory: client
