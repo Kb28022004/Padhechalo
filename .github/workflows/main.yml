@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [22.x]
+        node-version: [18.x]
 
     steps:
       - name: Checkout code
@@ -21,34 +21,40 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+          cache: npm
 
-      # Backend
-      - name: Install backend deps
+      # ---------------- BACKEND ----------------
+      - name: Install backend dependencies
         working-directory: server
         run: npm install
 
-      - name: Backend env
+      - name: Create backend .env
         working-directory: server
         run: echo "${{ secrets.PROD_BACKEND_ENV }}" > .env
 
-      - name: Start backend
+      - name: Start backend with PM2
         working-directory: server
-        run: /home/ubuntu/.nvm/versions/node/v24.12.0/bin/pm2 restart backend || /home/ubuntu/.nvm/versions/node/v24.12.0/bin/pm2 start index.js --name backend
+        run: |
+          pm2 restart backend || pm2 start index.js --name backend
 
-      # Frontend
-      - name: Install frontend deps
+      # ---------------- FRONTEND ----------------
+      - name: Install frontend dependencies
         working-directory: client
-        run: npm install -f
+        run: npm install --legacy-peer-deps
 
-      - name: Frontend env
+      - name: Create frontend .env
         working-directory: client
         run: echo "${{ secrets.PROD_FRONTEND_ENV }}" > .env
 
       - name: Build frontend
         working-directory: client
+        env:
+          NODE_OPTIONS: --max_old_space_size=4096
+          BROWSERSLIST_IGNORE_OLD_DATA: true
+          CI: false
         run: npm run build
 
-      - name: Deploy to Nginx
+      - name: Deploy frontend to Nginx
         run: |
           sudo rm -rf /var/www/html/*
-          sudo cp -r client/dist/* /var/www/html/
+          sudo cp -r client/build/* /var/www/html/
