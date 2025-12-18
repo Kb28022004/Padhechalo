@@ -4,7 +4,7 @@ import axios from "axios";
 
 const CartContext = createContext();
 
-const API = "http://localhost:8000/api/v1/course";
+const API = `${process.env.REACT_APP_API_URL}/course`;
 
 const getLocalCartData = () => {
   const newCartData = localStorage.getItem("cartItem");

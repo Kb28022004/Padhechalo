@@ -14,7 +14,7 @@ const initialState = {
   success: false,
 };
 
-const API = "http://localhost:8000/api/v1/user";
+const API = `${process.env.REACT_APP_API_URL}/user`;
 
 const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);

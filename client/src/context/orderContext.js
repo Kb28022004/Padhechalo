@@ -4,8 +4,7 @@ import axios from "axios";
 
 const OrderContext = createContext();
 
-const API = "http://localhost:8000/api/v1/order";
-
+const API = `${process.env.REACT_APP_API_URL}/order`;
 const initialState = {
   order: {},
   orders: [],

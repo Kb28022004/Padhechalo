@@ -4,8 +4,7 @@ import axios from "axios";
 
 const CourseContext = createContext();
 
-const API = "http://localhost:8000/api/v1/course";
-
+const API = `${process.env.REACT_APP_API_URL}/course`;
 const initialState = {
   loading: false,
   error: null,
