@@ -33,7 +33,7 @@ jobs:
 
       - name: Start backend
         working-directory: server
-        run: pm2 restart backend || pm2 start index.js --name backend
+        run: /home/ubuntu/.nvm/versions/node/v24.12.0/bin/pm2 restart backend || /home/ubuntu/.nvm/versions/node/v24.12.0/bin/pm2 start index.js --name backend
 
       # Frontend
       - name: Install frontend deps
